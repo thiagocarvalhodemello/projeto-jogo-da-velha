@@ -1,0 +1,119 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    display: flex;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #333;
+    font-family: "Madimi One", sans-serif;
+
+}
+
+h1 {
+    color: #bb07b8;
+    font-size: 3em;
+    font-weight: 800;
+    margin: 10px 0;
+}
+
+.area {
+    width: 300px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 30px;
+}
+.area .item {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+    font-weight: bold;
+    color: #FFF;
+    cursor: pointer;
+}
+.item:hover {
+    background-color: #bb07b866;
+}
+
+.item.t {
+    border-top: 1px solid #FFF;
+}
+.item.l {
+    border-left: 1px solid #FFF;
+}
+.item.r {
+    border-right: 1px solid #FFF;
+}
+.item.b {
+    border-bottom: 1px solid #FFF;
+}
+
+.info {
+    width: 300px;
+    display: flex;
+    margin-top: 30px;
+    border: 1px dotted #FFF;
+    padding: 10px;
+}
+.infoitem {
+    flex: 1;
+}
+.infotitulo {
+    font-size: 1em;
+    font-weight: 600;
+    text-align: center;
+    color: #bb07b8;
+    margin-bottom: 10px;
+}
+.infocorpo {
+    text-align: center;
+    color: #FFF;
+    font-size: 20px;
+}
+
+.modo-jogo {
+    margin-bottom: 15px;
+}
+
+.modo-jogo button {
+    margin: 5px;
+    padding: 15px;
+    background-color: #555;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Adicionamos uma transição para suavizar a mudança de cor */
+}
+
+.modo-jogo button:hover,
+.modo-jogo button.active { /* Adicionamos um estilo para quando o botão estiver ativo */
+    background-color: #bb07b8;
+    font-style: italic;
+}
+
+.reset {
+    border: 1px solid #000;
+    background-color: rgba(0, 0, 0, 0.2);
+    color: #FFF;
+    padding: 10px;
+    margin-top: 20px;
+    cursor: pointer; /* Adicionamos cursor pointer para indicar que o botão é clicável */
+    transition: background-color 0.3s; /* Adicionamos uma transição para suavizar a mudança de cor */
+}
+
+.reset:hover {
+    background-color: #bb07b8;
+    font-style: italic;
+
+}
