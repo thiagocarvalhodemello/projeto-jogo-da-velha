@@ -59,14 +59,16 @@ h1 {
 }
 
 .info {
-    width: 300px;
+    width: 400px;
     display: flex;
     margin-top: 30px;
     border: 1px dotted #FFF;
-    padding: 10px;
+    padding: 5px;
 }
 .infoitem {
     flex: 1;
+    margin-right: 5px;
+    margin-bottom: 10px;
 }
 .infotitulo {
     font-size: 1em;
@@ -79,6 +81,7 @@ h1 {
     text-align: center;
     color: #FFF;
     font-size: 20px;
+
 }
 
 .modo-jogo {
@@ -93,23 +96,26 @@ h1 {
     border: none;
     border-radius: 25px;
     cursor: pointer;
-    transition: background-color 0.3s; /* Adicionamos uma transição para suavizar a mudança de cor */
+    transition: background-color 0.3s; 
 }
 
-.modo-jogo button:hover,
-.modo-jogo button.active { /* Adicionamos um estilo para quando o botão estiver ativo */
+.modo-jogo button:hover{ 
     background-color: #bb07b8;
     font-style: italic;
 }
 
+.modo-jogo button.active {
+    background-color: #bb07b8;
+    font-style: italic;
+}
 .reset {
     border: 1px solid #000;
     background-color: rgba(0, 0, 0, 0.2);
     color: #FFF;
     padding: 10px;
-    margin-top: 20px;
-    cursor: pointer; /* Adicionamos cursor pointer para indicar que o botão é clicável */
-    transition: background-color 0.3s; /* Adicionamos uma transição para suavizar a mudança de cor */
+
+    cursor: pointer; 
+    transition: background-color 0.3s; 
 }
 
 .reset:hover {

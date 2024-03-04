@@ -1,143 +1,151 @@
-// Dados iniciais
-let quadro = {
-    a1: '', a2: '', a3: '',
-    b1: '', b2: '', b3: '',
-    c1: '', c2: '', c3: ''
-};
-let playing = false;
-let vez = 'x';
-let warning = '';
+document.addEventListener('DOMContentLoaded', function () {
+    const modoJogoButtons = document.querySelectorAll('.modo-jogo button');
+    const resetButton = document.querySelector('.reset');
+    const infoVez = document.querySelector('.info .vez');
+    const infoResultado = document.querySelector('.info .resultado');
+    const area = document.querySelector('.area');
+    let jogadorAtual = 'X';
+    let jogoAtivo = false;
+    let placarX = 0;
+    let placarO = 0;
 
-reset();
+    // Função para iniciar um novo jogo
+    function iniciarJogo() {
+        jogoAtivo = true;
+        infoVez.textContent = jogadorAtual;
+        infoResultado.textContent = '--';
+        area.querySelectorAll('.item').forEach(cell => {
+            cell.textContent = '';
+        });
+    
+        if (modoJogoButtons[1].classList.contains('active')) {
+            // Se o modo jogador vs CPU estiver ativo, define o jogador inicial como 'X'
+            jogadorAtual = 'X';
+            if (jogadorAtual === 'X') {
+                // Se for a vez do jogador, espere pela sua jogada
+                return;
+            } else {
+                // Se for a vez da CPU, executa um movimento aleatório
+                jogadaCPU();
+            }
+        } else {
+            // Se for o modo "Jogador vs Jogador", coloque o jogador inicial em 'X'
+            jogadorAtual = 'X';
+        }
+    }
 
-// controlar o modo de jogo
-let modoJogo = '';
+    // Função Jogador CPU
+    function jogadaCPU() {
+        const cells = area.querySelectorAll('.item');
+        const emptyCells = [...cells].filter(cell => cell.textContent === '');
+        const randomIndex = Math.floor(Math.random() * emptyCells.length);
+        emptyCells[randomIndex].textContent = 'O';
+        if (verificarVitoria()) {
+            infoResultado.textContent = `O jogador O venceu!`;
+            atualizarPlacar();
+            jogoAtivo = false;
+        } else if (verificarEmpate()) {
+            infoResultado.textContent = 'Empate!';
+            jogoAtivo = false;
+        } else {
+            alternarJogador();
+        }
+    }
 
-// Eventos
-document.querySelector('.modo-jogo').addEventListener('click', function(e) {
-    modoJogo = e.target.getAttribute('data-mode');
-    reset();
-});
+    // Função alternar modos de jogo
+    function selecionarModoJogo() {
+        modoJogoButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                modoJogoButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                // Redefinir o estado do jogo ao mudar de modo
+                jogadorAtual = 'X';
+                placarX = 0;
+                placarO = 0;
+                infoResultado.textContent = `Placar: X - ${placarX} | O - ${placarO}`;
+                iniciarJogo();
+            });
+        });
+        iniciarJogo();
+    };
 
-document.querySelector('.reset').addEventListener('click', function() {
-    reset();
-});
+    // Função verificar vitória
+    function verificarVitoria() {
+        const linhas = [
+            ['a1', 'a2', 'a3'],
+            ['b1', 'b2', 'b3'],
+            ['c1', 'c2', 'c3'],
+            ['a1', 'b1', 'c1'],
+            ['a2', 'b2', 'c2'],
+            ['a3', 'b3', 'c3'],
+            ['a1', 'b2', 'c3'],
+            ['a3', 'b2', 'c1']
+        ];
 
-document.querySelectorAll('.item').forEach((item)=>{
-    item.addEventListener('click', (e) => {
-        let loc = e.target.getAttribute('data-item');
-        
-        if(playing && quadro[loc] === '' && (modoJogo === 'jogadorVsJogador' || (modoJogo === 'jogadorVsCPU' && vez === 'x'))) {
-            quadro[loc] = vez;
-            renderQuadro(); 
-            togglePlayer();
-            if (modoJogo === 'jogadorVsCPU' && playing) {
-                turnoCPU(); 
+        for (let linha of linhas) {
+            const [a, b, c] = linha;
+            if (area.querySelector(`[data-item="${a}"]`).textContent === jogadorAtual &&
+                area.querySelector(`[data-item="${b}"]`).textContent === jogadorAtual &&
+                area.querySelector(`[data-item="${c}"]`).textContent === jogadorAtual) {
+                return true;
             }
         }
-    });
-});
-
-// Funções
-
-function turnoCPU() {
-    // Lógica para a CPU escolher uma posição vazia randomicamente
-    let posicoesVazias = [];
-    for (let i in quadro) {
-        if (quadro[i] === '') {
-            posicoesVazias.push(i);
-        }
+        return false;
     }
 
-    // Escolha uma posição aleatória entre as posições vazias
-    let posicaoCPU = posicoesVazias[Math.floor(Math.random() * posicoesVazias.length)];
-    quadro[posicaoCPU] = vez;
-    renderQuadro();
-    togglePlayer();
-}
- // Reseta o modo de jogo
-function reset() {
-    modoJogo = ''; 
-    warning = ''; 
-    vez = 'x'; 
-    playing = true;
-
-    // Resetar os quadros
-    for(let i in quadro) {
-        quadro[i] = '';
+    // Função verificar empate
+    function verificarEmpate() {
+        return [...area.querySelectorAll('.item')].every(cell => cell.textContent !== '');
     }
 
-    // Renderizar tudo
-    renderQuadro();
-    renderInfo();
-}
-
-function renderQuadro() {
-    for(let i in quadro) {
-        let item = document.querySelector(`div[data-item=${i}]`);
-        if(quadro[i] !== '') {
-            item.innerText = quadro[i];
+    // Função atualizar placar
+    function atualizarPlacar() {
+        if (jogadorAtual === 'X') {
+            placarX++;
         } else {
-            item.innerText = '';
+            placarO++;
+        }
+        infoResultado.textContent = `Placar: X - ${placarX} | O - ${placarO}`;
+    }
+
+    // Função alternar jogadores
+    function alternarJogador() {
+        jogadorAtual = jogadorAtual === 'X' ? 'O' : 'X';
+        infoVez.textContent = jogadorAtual;
+    }
+
+    // Função clique nos blocos
+    function handleCellClick(event) {
+        const cell = event.target;
+        if (jogoAtivo && cell.textContent === '') {
+            cell.textContent = jogadorAtual;
+            if (verificarVitoria()) {
+                infoResultado.textContent = `O jogador ${jogadorAtual} venceu!`;
+                atualizarPlacar();
+                jogoAtivo = false;
+            } else if (verificarEmpate()) {
+                infoResultado.textContent = 'Empate!';
+                jogoAtivo = false;
+            } else {
+                alternarJogador();
+                // Verifique se o próximo jogador é CPU
+                if (modoJogoButtons[1].classList.contains('active') && jogadorAtual === 'O') {
+                    jogadaCPU();
+                }
+            }
         }
     }
 
-    checkGame();
-}
-
-function renderInfo() {
-    document.querySelector('.vez').innerHTML = vez;
-    document.querySelector('.resultado').innerHTML = warning;
-}
-
-function togglePlayer() {
-    if (modoJogo === 'jogadorVsJogador') {
-        vez = vez === 'x' ? 'o' : 'x';
-    }
-    renderInfo();
-}
-
-function checkGame() {
-    if(checkWinnerFor('x')) {
-        warning = 'O "x" venceu';
-        playing = false;
-    } else if(checkWinnerFor('o')) {
-        warning = 'O "o" venceu';
-        playing = false;
-    } else if(isFull()) {
-        warning = 'Deu empate';
-        playing = false;
-    }
-}
-
-function checkWinnerFor(i) {
-    let pos = [
-        'a1,a2,a3',
-        'b1,b2,b3',
-        'c1,c2,c3',
-
-        'a1,b1,c1',
-        'a2,b2,c2',
-        'a3,b3,c3',
-
-        'a1,b2,c3',
-        'a3,b2,c1'
-    ];
-
-    for(let w in pos) {
-        let pArray = pos[w].split(',');
-        let hasWon = pArray.every(option=>quadro[option] === i);
-        if(hasWon) return true;
+    // Função clique no reset
+    function handleResetClick() {
+        iniciarJogo();
+        placarX = 0;
+        placarO = 0;
+        infoResultado.textContent = `Placar: X - ${placarX} | O - ${placarO}`;
     }
 
-    return false;
-}
-
-function isFull() {
-    for(let i in quadro) {
-        if(quadro[i] === '') {
-            return false;
-        }
-    }
-    return true;
-}
+    // Adicionar eventos aos botões e células
+    selecionarModoJogo();
+    area.addEventListener('click', handleCellClick);
+    resetButton.addEventListener('click', handleResetClick);
+});
