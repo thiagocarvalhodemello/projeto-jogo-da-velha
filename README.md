@@ -18,3 +18,7 @@ Projeto Senac para treinar a lógica de programação utilizando JavaScript
 - `turnoCPU()`: Função que implementa a lógica para a CPU escolher uma posição vazia aleatoriamente.
 - `reset()`: Função que reseta o jogo para o estado inicial.
 - `renderQuadro()`: Função que renderiza o tabuleiro na tela.
+
+
+## Fluxograma
+https://whimsical.com/W7i1sqUPyDQgrzBPEgFiC1
